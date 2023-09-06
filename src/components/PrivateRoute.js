@@ -1,7 +1,7 @@
 // import react.
 import React, {Fragment} from 'react';
 // import react router.
-import { BrowserRouter, Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Route, Navigate } from 'react-router-dom';
 
 
   const PrivateRoute = ({component: Component, ...rest}) => {

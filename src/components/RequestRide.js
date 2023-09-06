@@ -1,4 +1,4 @@
-// import useContext.
+// import useContext
 import { useContext } from 'react';
 // import realtime database from Firebase.
 // import { realTimeDb } from "../firebase";

@@ -13,6 +13,7 @@ import SignUp from "./SignUp";
 import { useNavigate } from 'react-router-dom';
 // import logo 
 import logoBlack from '../logo_black.png';
+import bloblocor from '../bloblocor.png';
 
 function Login(props) {
   // get shared data from context.
@@ -89,7 +90,7 @@ function Login(props) {
     <div className="login__container">
       <div className="login__welcome">
         <div className="login__logo">
-          <img src={logoBlack} alt="Uber Clone" />
+          <img src={bloblocor} alt="Uber Clone" />
         </div>
         <p>Get moving with BlobloCor</p>
       </div>

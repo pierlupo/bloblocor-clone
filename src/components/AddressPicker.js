@@ -48,7 +48,7 @@ function AddressPicker(props) {
   };
 
   /**
-   * init provider.
+   * init provider
    */
   const initProvider = () => {
     provider.current = new OpenStreetMapProvider({

@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const { user, setUser } = useContext(Context);
-
   const navigate = useNavigate();
 
   /**
@@ -31,7 +30,7 @@ function Header() {
     <div className="header">
       <div className="header__left">
         {/* <img src={logoWhite} alt="Uber Clone" /> */}
-        <div id="title">BlobloCor</div>
+        <div id="title">BLOBLOCOR</div>
         {
           user && (
             <div className="header__right">
@@ -41,7 +40,7 @@ function Header() {
           )
         }
       </div>
-      <span className="header__logout" onClick={logout}><span>Logout</span></span>
+      <span className="header__logout" onClick={logout}><span id="btnlogout">LOGOUT</span></span>
     </div>
   );
 }
