@@ -27,7 +27,6 @@ input {
   display: none;
 }
 
-
 .login__container {
   background-color: #f0f2f5;
   display: grid;
@@ -734,3 +733,13 @@ input {
   color: #000;
   font-weight: 600;
 }
+
+#title{
+  color:rgba(255, 255, 255, 0.829);
+  font-size: 25px;
+  }
+  
+  #map{
+    width: "100%";
+    height: "100vh";
+  }

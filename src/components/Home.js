@@ -58,6 +58,13 @@ function Home() {
    * init leaflet map.
    */
   const initMap = () => {
+
+    let container = L.DomUtil.get("map");
+
+    if (container != null) {
+    container._leaflet_id = null;
+    }
+    
     map.current = L.map("map", {
       center: [38.8951, -77.0364],
       zoom: 13,
@@ -68,7 +75,7 @@ function Home() {
       ]
     });
   };
-
+  
   /**
    * init route control.
    */

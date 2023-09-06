@@ -97,7 +97,7 @@ function Login(props) {
         <div className="login__form">
           <input
             type="text"
-            placeholder="Email or username"
+            placeholder="Email or Username"
             ref={emailRef}
           />
           <input type="password" placeholder="Password" ref={passwordRef} />

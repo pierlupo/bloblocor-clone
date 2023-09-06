@@ -137,9 +137,7 @@ function App() {
       
         <Routes >
           {/* Home Route */}
-          
-         {/* <PrivateRoute exact path="/" component={Home} /> */}
-        
+          <Route exact path="/" element = { <Home /> }></Route>
           {/* <PrivateRoute exact path="/chat" component={Chat} /> */}
           {/* End Home Route */}
           {/* Login Route */}
