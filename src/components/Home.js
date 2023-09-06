@@ -9,11 +9,12 @@ import RideDetail from './RideDetail';
 import Context from '../Context';
 // import leaflet
 import L from "leaflet";
+import 'leaflet/dist/leaflet.css';
 
 require("leaflet-routing-machine");
 
 const style = {
-  width: "100%",
+  width: "100vw",
   height: "100vh"
 };
 
@@ -22,6 +23,7 @@ function Home() {
   const { selectedFrom, selectedTo, user, currentRide } = useContext(Context);
 
   const map = useRef();
+
   const routeControl = useRef();
 
   useEffect(() => {
@@ -64,14 +66,29 @@ function Home() {
     if (container != null) {
     container._leaflet_id = null;
     }
+
+    // map.current = L.map("map",
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // }));
+
+    //map.setOptions({ minZoom: 5, maxZoom: 15 });
     
     map.current = L.map("map", {
+      
       center: [38.8951, -77.0364],
       zoom: 13,
+      // minZoom: 5, 
       layers: [
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          minZoom: 5,
+          // noWrap: true,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        })
+        }
+      //   ,{
+      //     noWrap: true
+      // }
+       )
       ]
     });
   };
