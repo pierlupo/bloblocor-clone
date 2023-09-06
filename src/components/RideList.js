@@ -1,7 +1,7 @@
 // import useEffect.
 import { useEffect, useState, useContext } from 'react';
 // import firebase authentication.
-import { realTimeDb } from "../firebase";
+// import { realTimeDb } from "../firebase";
 // import Context
 import Context from '../Context';
 function RideList() {
@@ -11,27 +11,27 @@ function RideList() {
   const { user, setIsLoading, setCurrentRide, setSelectedFrom, setSelectedTo } = useContext(Context);
 
 
-  useEffect(() => {
-    const rideRef = realTimeDb.ref().child('rides').orderByChild('status').equalTo(0);
-    const listener = rideRef.on("value", function(snapshot) {
-      const values = snapshot.val();
-      if (values) {
-        const keys = Object.keys(values);
-        if (keys && keys.length !== 0) {
-          const rides = [];
-          for (const key of keys) {
-            rides.push(values[key]);
-          }      
-          setRideRequests(() => rides);
-        } else {
-          setRideRequests(() => []);
-        }
-      } else { 
-        setRideRequests(() => []);
-      }
-    });
-    return () => { rideRef.off('value', listener); }
-  }, []);
+  // useEffect(() => {
+    // const rideRef = realTimeDb.ref().child('rides').orderByChild('status').equalTo(0);
+  //   const listener = rideRef.on("value", function(snapshot) {
+  //     const values = snapshot.val();
+  //     if (values) {
+  //       const keys = Object.keys(values);
+  //       if (keys && keys.length !== 0) {
+  //         const rides = [];
+  //         for (const key of keys) {
+  //           rides.push(values[key]);
+  //         }      
+  //         setRideRequests(() => rides);
+  //       } else {
+  //         setRideRequests(() => []);
+  //       }
+  //     } else { 
+  //       setRideRequests(() => []);
+  //     }
+  //   });
+  //   return () => { rideRef.off('value', listener); }
+  // }, []);
 
   /**
    * accept ride
@@ -42,18 +42,18 @@ function RideList() {
     request.status = 1;
     // show loading indicator.
     setIsLoading(true);
-    realTimeDb.ref(`rides/${request.rideUuid}`).set(request).then(() => {
-      setIsLoading(false);
+    // realTimeDb.ref(`rides/${request.rideUuid}`).set(request).then(() => {
+    //   setIsLoading(false);
       // set created ride.
-      localStorage.setItem('currentRide', JSON.stringify(request));
+      // localStorage.setItem('currentRide', JSON.stringify(request));
       // set current ride.
-      setCurrentRide(() => request);
+      // setCurrentRide(() => request);
       // from / to.
-      setSelectedFrom(() => request.pickup);
-      setSelectedTo(() => request.destination);
-    }).catch(() => {
-      setIsLoading(false);
-    });
+    //   setSelectedFrom(() => request.pickup);
+    //   setSelectedTo(() => request.destination);
+    // }).catch(() => {
+    //   setIsLoading(false);
+    // });
   };
 
   const renderRideList = () => {

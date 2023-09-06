@@ -3,14 +3,14 @@ import { useContext } from 'react';
 // import Context
 import Context from '../Context';
 // import react router
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import logo white
 import logoWhite from '../logo_white.png';
 
 function Header() {
   const { user, setUser } = useContext(Context);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   /**
    * logout
@@ -23,7 +23,7 @@ function Header() {
       // remove authenticated user from context.
       setUser(null);
       // redirect to login page.
-      history.push('/login');
+      navigate.push('/login');
     }
   }
 
