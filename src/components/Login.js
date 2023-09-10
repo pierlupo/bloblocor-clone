@@ -1,13 +1,12 @@
 // import useRef and useContext
 import { useRef, useContext } from "react";
-import 'firebase/database'
+// import 'firebase/database'
 // import Context to get shared data from React context.
 import Context from "../Context";
 // import firebase authentication and real time database.
-// import { getDatabase, ref } from "firebase/database";
-import { auth, realTimeDb } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth"
-import { get, ref } from 'firebase/database'
+ import { auth, realTimeDb } from "../firebase";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { ref, onValue, getDatabase } from 'firebase/database'
 // import validator to validate user's credentials.
 import validator from "validator";
 // import custom components.
@@ -45,61 +44,73 @@ function Login(props) {
   /**
    * login
    */
-  const login = (e) => {
-    e.preventDefault();
+  const login = () => {
     // show loading indicator.
     setIsLoading(true);
     // get the user's credentials.
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-
-     if (isUserCredentialsValid(email, password)) {
-      //console.log(email, password);
+    const auth = getAuth();
+    //  if (isUserCredentialsValid(email, password)) {
+      console.log(email, password);
       // if the user's credentials are valid, call Firebase authentication service.
-       signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-        //const user = auth.userCredential.user;
-        // const user = userCredential.user;
+      signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+
         const userEmail = userCredential.user.email;
-        //console.log(userEmail);
-             ref(realTimeDb).child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
-               const val = snapshot.val();
-               if (val) {
-                 const keys = Object.keys(val);
-                 const user = val[keys[0]];
-                 console.log(keys, user);
+        // const dbRef = ref(realTimeDb,`users/${email}`);
+        // dbRef.on("value", snapshot => {
+        //   console.log(snapshot.val());
+        // });
+        if (isUserCredentialsValid(email, password)) {
+         
+          localStorage.setItem('auth', JSON.stringify(userEmail));
+          setUser(userEmail);
+          setIsLoading(false);
+          navigate('/')
+        }
+      });
+    }
+
+    // }
+        // dbRef.orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
+        //        const val = snapshot.val();
+        //        if (val) {
+        //          const keys = Object.keys(val);
+        //          const user = val[keys[0]];
+        //          console.log(keys, user);
                // login cometchat.
                //cometChat.login(user.id, `${process.env.REACT_APP_COMETCHAT_AUTH_KEY}`).then(
-               cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04" ).then(
-                 User => {
-                  // User loged in successfully.
-                  // save authenticated user to local storage.
-                   localStorage.setItem('auth', JSON.stringify(user));
-                  // save authenticated user to context.
-                   setUser(user);
-                  // hide loading.
-                   setIsLoading(false);
-                  // redirect to home page.
-                  navigate('/');
-                  console.log(user)
-                 },
-                error => {
-                  " User login failed, check error and take appropriate action."
-                }
-               );
-              }
-           });
-         })
-        .catch((error) => {      
-          // hide loading indicator.
-          setIsLoading(false);
-          alert(`Your username or password is not correct`);
-        });
-    } else {
-      // hide loading indicator.
-      setIsLoading(false);
-      alert(`Your username or password is not correct`);
-     }
-   };
+  //              cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04" ).then(
+  //                User  => {
+  //                 // User loged in successfully.
+  //                 // save authenticated user to local storage.
+  //                  localStorage.setItem('auth', JSON.stringify(user));
+  //                 // save authenticated user to context.
+  //                  setUser(user);
+  //                 // hide loading.
+  //                  setIsLoading(false);
+  //                 // redirect to home page.
+  //                 navigate('/');
+  //                 console.log(user)
+  //                },
+  //               error => {
+  //                 " User login failed, check error and take appropriate action."
+  //               }
+  //              );
+  //             }
+  //          });
+  //        })
+  //       .catch((error) => {      
+  //         // hide loading indicator.
+  //         setIsLoading(false);
+  //         alert(`Your username or password is not correct`);
+  //       });
+  //   } else {
+  //     // hide loading indicator.
+  //     setIsLoading(false);
+  //     alert(`Your username or password is not correct`);
+  //    }
+  //  };
 
   return (
     <div className="login__container">
@@ -127,7 +138,6 @@ function Login(props) {
         </div>
       </div>
     </div>
-  );
-}
-
+  )
+};
 export default withModal(SignUp)(Login);
