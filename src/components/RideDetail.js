@@ -1,7 +1,7 @@
 // import useContext.
 import { useContext } from 'react';
 // import firebase authentication.
-//import { realTimeDb } from "../firebase";
+import { realTimeDb } from "../firebase";
 // import Context
 import Context from '../Context';
 // import react router. 
@@ -30,14 +30,14 @@ function RideDetail(props) {
     // show loading indicator.
     setIsLoading(true);
     // update data on Firebase.
-  //   realTimeDb.ref(`rides/${ride.rideUuid}`).set(ride).then(() => {
-  //     setIsLoading(false);
-  //     removeRideFromStorageAndContext();
-  //   }).catch(() => {
-  //     setIsLoading(false);
-  //   });
-  // }
+    realTimeDb.ref(`rides/${ride.rideUuid}`).set(ride).then(() => {
+      setIsLoading(false);
+      removeRideFromStorageAndContext();
+    }).catch(() => {
+      setIsLoading(false);
+    });
   }
+  
   /**
    * cancel ride
    */
@@ -66,7 +66,7 @@ function RideDetail(props) {
    * talk to user
    */
   const talkToUser = () => {
-    navigate.push('/chat');
+    navigate('/chat');
   };
 
   return (

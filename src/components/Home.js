@@ -85,9 +85,6 @@ function Home() {
           // noWrap: true,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }
-      //   ,{
-      //     noWrap: true
-      // }
        )
       ]
     });

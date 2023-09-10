@@ -5,7 +5,9 @@ import Context from "../Context";
 // import validator to validate user's information.
 import validator from "validator";
 // import firebase authentication.
-//import { auth, realTimeDb } from "../firebase";
+import { auth, realTimeDb } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { set, ref } from 'firebase/database'
 // import uuid to generate id for users.
 import { v4 as uuidv4 } from "uuid";
 
@@ -52,7 +54,7 @@ function SignUp(props) {
       alert("Please input your email");
       return false;
     }
-    if (!validator.isMobilePhone(phone, ['vi-VN', 'en-US'])) {
+    if (!validator.isMobilePhone(phone, ['en-US', 'fr-FR'])) {
       alert("Please input your phone number");
       return false;
     }
@@ -86,51 +88,52 @@ function SignUp(props) {
     const password = passwordRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
 
-    // if (isSignupValid({ email, phone, role, password, confirmPassword })) {
+     if (isSignupValid({ email, phone, role, password, confirmPassword })) {
       // show loading 
-      // setIsLoading(true);
+       setIsLoading(true);
       // create new user's uuid.
-      // const userUuid = uuidv4(); 
+       const userUuid = uuidv4(); 
       // generate user's avatar.
-      // const userAvatar = generateAvatar();
+       const userAvatar = generateAvatar();
       // call firebase to to register a new account.
-      // auth.createUserWithEmailAndPassword(email, password).then((userCrendentials) => {
-      //   if (userCrendentials) {
+      createUserWithEmailAndPassword(auth, email, password).then((auth) => {
+         if (auth) {
           // call firebase real time database to insert a new user.
-          // realTimeDb.ref(`users/${userUuid}`).set({
-          //   id: userUuid,
-          //   email,
-          //   phone,
-          //   role,
-          //   avatar: userAvatar
-          // }).then(() => {
-          //   alert(`${userCrendentials.user.email} was created successfully! Please sign in with your created account`);
+          set(ref(realTimeDb,`users/${userUuid}`),{
+             id: userUuid,
+             email,
+             phone,
+             role,
+             avatar: userAvatar
+           }).then(() => {
+             alert(`${auth.user.email} was created successfully! Please sign in with your created account`);
             // cometchat auth key
-            // const authKey = `${process.env.REACT_APP_COMETCHAT_AUTH_KEY}`;  
+            //  const authKey = `${process.env.REACT_APP_COMETCHAT_AUTH_KEY}`; 
+             const authKey = "acbd9af1d08f7723c91675770d8d4598f9314c04";   
             // call cometchat service to register a new account.
-  //           const user = new cometChat.User(userUuid);
-  //           user.setName(email);
-  //           user.setAvatar(userAvatar);
+             const user = new cometChat.User(userUuid);
+             user.setName(email);
+             user.setAvatar(userAvatar);
 
-  //           cometChat.createUser(user, authKey).then(
-  //             user => {
-  //               setIsLoading(false);
-  //             },error => {
-  //               setIsLoading(false);
-  //             }
-  //           )
-  //           // close sign up dialog.
-  //           toggleModal(false);
-  //         });
-  //       }
-  //     }).catch((error) => {
-  //       console.log(error);
-  //       setIsLoading(false);
-  //       alert(`Cannot create your account, ${email} might be existed, please try again!`);
-  //     }); 
-  //   }
-  // };
-  }
+             cometChat.createUser(user, authKey).then(
+              user => {
+                setIsLoading(false);
+              },error => {
+                setIsLoading(false);
+              }
+            )
+            // close sign up dialog.
+            toggleModal(false);
+          });
+        }
+      }).catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+        alert(`Cannot create your account, ${email} might exist, please try again!`);
+      }); 
+    }
+  };
+  
   return (
     <div className="signup">
       <div className="signup__content">

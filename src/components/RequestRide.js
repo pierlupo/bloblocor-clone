@@ -1,7 +1,7 @@
 // import useContext
 import { useContext } from 'react';
 // import realtime database from Firebase.
-// import { realTimeDb } from "../firebase";
+import { realTimeDb } from "../firebase";
 // import uuid to generate id for users.
 import { v4 as uuidv4 } from "uuid";
 // import Context
@@ -32,12 +32,12 @@ function RequestRide(props) {
         "status": 0
       }
       // insert to Firebase realtime database.
-    //   realTimeDb.ref(`rides/${rideUuid}`).set(ride).then(() => {
-    //     setRideRequest(ride);
-    //     setIsLoading(false);
-    //   }).catch(() => {
-    //     setIsLoading(false);
-    //   });
+       realTimeDb.refFromURL(`rides/${rideUuid}`).set(ride).then(() => {
+         setRideRequest(ride);
+    setIsLoading(false);
+       }).catch(() => {
+         setIsLoading(false);
+       });
      }
    };
   

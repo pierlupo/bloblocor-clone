@@ -1,5 +1,5 @@
 // import react.
-import React, {Fragment} from 'react';
+import React from 'react';
 // import react router.
 import { Route, Navigate } from 'react-router-dom';
 

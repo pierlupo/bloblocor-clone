@@ -1,18 +1,22 @@
 // import useRef and useContext
 import { useRef, useContext } from "react";
+import 'firebase/database'
 // import Context to get shared data from React context.
 import Context from "../Context";
 // import firebase authentication and real time database.
-//import { auth, realTimeDb } from "../firebase";
+// import { getDatabase, ref } from "firebase/database";
+import { auth, realTimeDb } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { ref } from 'firebase/database'
 // import validator to validate user's credentials.
 import validator from "validator";
-// import custom componnets.
+// import custom components.
 import withModal from "./Modal";
 import SignUp from "./SignUp";
 // import navigate
 import { useNavigate } from 'react-router-dom';
 // import logo 
-import logoBlack from '../logo_black.png';
+//import logoBlack from '../logo_black.png';
 import bloblocor from '../bloblocor.png';
 
 function Login(props) {
@@ -45,41 +49,47 @@ function Login(props) {
     // get the user's creadentials.
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
+    //console.log(email, password);
     if (isUserCredentialsValid(email, password)) {
       // if the user's credentials are valid, call Firebase authentication service.
-      // auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
-      //     const userEmail = userCredential.user.email;
-      //     realTimeDb.ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
-      //       const val = snapshot.val();
-      //       if (val) {
-      //         const keys = Object.keys(val);
-      //         const user = val[keys[0]];
+       signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+           const user = userCredential.user;
+           //const userEmail = auth.user.email;
+           //const userPw = auth.user.password;
+           //ref(realTimeDb).child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
+           ref(realTimeDb).child('users').equalTo(user).on("value", function(snapshot) {
+             const val = snapshot.val();
+             if (val) {
+               const keys = Object.keys(val);
+               const user = val[keys[0]];
+               console.log(keys, user);
               // login cometchat.
-              // cometChat.login(user.id, `${process.env.REACT_APP_COMETCHAT_AUTH_KEY}`).then(
-                // User => {
+               //cometChat.login(user.id, `${process.env.REACT_APP_COMETCHAT_AUTH_KEY}`).then(
+                cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04" ).then(
+                 User => {
                   // User loged in successfully.
                   // save authenticated user to local storage.
-                  // localStorage.setItem('auth', JSON.stringify(user));
+                   localStorage.setItem('auth', JSON.stringify(user));
                   // save authenticated user to context.
-                  // setUser(user);
+                   setUser(user);
                   // hide loading.
-                  // setIsLoading(false);
+                   setIsLoading(false);
                   // redirect to home page.
-                  // navigate.push('/');
-                // },
-                // error => {
+                   navigate('/');
+                 },
+                 error => {
                   // User login failed, check error and take appropriate action.
-        //         }
-        //       );
-        //     }
-        //   });
-        // })
-        // .catch((error) => {      
+                 }
+               );
+             }
+           });
+         })
+         .catch((error) => {      
           // hide loading indicator.
           setIsLoading(false);
           alert(`Your user's name or password is not correct`);
-    //     });
-    // } else {
+         });
+     } else {
       // hide loading indicator.
       setIsLoading(false);
       alert(`Your user's name or password is not correct`);
