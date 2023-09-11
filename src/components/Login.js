@@ -18,6 +18,8 @@ import { useNavigate } from 'react-router-dom';
 // import logo 
 //import logoBlack from '../logo_black.png';
 import bloblocor from '../bloblocor.png';
+import 'firebase/compat/database';
+
 
 function Login(props) {
   // get shared data from context.
@@ -59,68 +61,28 @@ function Login(props) {
         const userEmail = userCredential.user.email;
         
         if (isUserCredentialsValid(email, password)) {
-          //const userRef = ref(realTimeDb, 'users');
-          //const userRef = ref(realTimeDb);
-          // const userRef = "https://bloblocor-f56ab-default-rtdb.firebaseio.com/users"
-          // console.log(userRef, realTimeDb);
-          firebase.database().ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
+            const dbRef = firebase.database().ref.child('users')
+            dbRef.orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
             const val = snapshot.val();
             if (val) {
               const keys = Object.keys(val);
               const user = val[keys[0]];
-              cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04").then(
-                User => {
-          localStorage.setItem('auth', JSON.stringify(userEmail));
-          setUser(userEmail);
-          setIsLoading(false);
-          navigate('/')
+                 cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04").then(
+                  User => {
+                 localStorage.setItem('auth', JSON.stringify(userEmail));
+                 setUser(userEmail);
+                 setIsLoading(false);
+                 navigate('/')
+              });
             }
-          );
-       }
-      });
-    }
- })
-}
-        // realTimeDb.ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
-        //        const val = snapshot.val();
-        //        if (val) {
-        //          const keys = Object.keys(val);
-        //          const user = val[keys[0]];
-        //          console.log(keys, user);
-               // login cometchat.
-               //cometChat.login(user.id, `${process.env.REACT_APP_COMETCHAT_AUTH_KEY}`).then(
-  //              cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04" ).then(
-  //                User  => {
-  //                 // User logged in successfully.
-  //                 // save authenticated user to local storage.
-  //                  localStorage.setItem('auth', JSON.stringify(user));
-  //                 // save authenticated user to context.
-  //                  setUser(user);
-  //                 // hide loading.
-  //                  setIsLoading(false);
-  //                 // redirect to home page.
-  //                 navigate('/');
-  //                 console.log(user)
-  //                }
-  //,
-  //               error => {
-  //                 " User login failed, check error and take appropriate action."
-  //               }
-  //              );
-  //             }
-  //          });
-  //        })
-  //       .catch((error) => {      
-  //         // hide loading indicator.
-  //         setIsLoading(false);
-  //         alert(`Your username or password is not correct`);
-  //       });
-  //   } else {
-  //     // hide loading indicator.
-  //     setIsLoading(false);
-  //     alert(`Your username or password is not correct`);
-  //    }
-  //  };
+          });
+        }
+      }
+    );
+  }
+ 
+
+   
 
   return (
     <div className="login__container">
