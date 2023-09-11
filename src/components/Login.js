@@ -1,25 +1,36 @@
 // import useRef and useContext
-import 'firebase/database'
+import "firebase/database";
 import { useRef, useContext } from "react";
 // import Context to get shared data from React context.
 import Context from "../Context";
 // import firebase authentication and real time database.
 import { db, auth, realTimeDb } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth"
-import { ref } from "firebase/database"
-import firebase from 'firebase/compat/app'
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { ref } from "firebase/database";
 // import validator to validate user's credentials.
 import validator from "validator";
 // import custom components.
 import withModal from "./Modal";
 import SignUp from "./SignUp";
 // import navigate
-import { useNavigate } from 'react-router-dom';
-// import logo 
+import { useNavigate } from "react-router-dom";
+// import logo
 //import logoBlack from '../logo_black.png';
-import bloblocor from '../bloblocor.png';
-import 'firebase/compat/database';
+import bloblocor from "../bloblocor.png";
+import firebase from "firebase/compat/app";
+import "firebase/compat/database";
 
+let FirebaseConfig = {
+  apiKey: "AIzaSyA6H7Umx4PLVWPPzevyG3HU82Z9RrIlHeo",
+  authDomain: `${process.env.REACT_APP_FIREBASE_AUTH_DOMAIN}`,
+  databaseURL: "https://bloblocor-f56ab-default-rtdb.firebaseio.com/",
+  projectId: `${process.env.REACT_APP_FIREBASE_PROJECT_ID}`,
+  storageBucket: `${process.env.REACT_APP_FIREBASE_STORAGE_BUCKET}`,
+  messagingSenderId: `${process.env.REACT_APP_FIREABSE_MESSAGING_SENDER_ID}`,
+  appId: `${process.env.REACT_APP_FIREBASE_APP_ID}`,
+};
+
+firebase.initializeApp(FirebaseConfig);
 
 function Login(props) {
   // get shared data from context.
@@ -36,9 +47,9 @@ function Login(props) {
 
   /**
    * validate user's credentials.
-   * @param {*} email 
-   * @param {*} password  
-   * @returns 
+   * @param {*} email
+   * @param {*} password
+   * @returns
    */
   const isUserCredentialsValid = (email, password) => {
     return validator.isEmail(email) && password;
@@ -48,7 +59,6 @@ function Login(props) {
    * login
    */
   const login = () => {
-
     setIsLoading(true);
 
     const email = emailRef.current.value;
@@ -57,32 +67,47 @@ function Login(props) {
 
     console.log(email, password);
 
-      signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-        const userEmail = userCredential.user.email;
-        
-        if (isUserCredentialsValid(email, password)) {
-            const dbRef = firebase.database().ref.child('users')
-            dbRef.orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
-            const val = snapshot.val();
-            if (val) {
-              const keys = Object.keys(val);
-              const user = val[keys[0]];
-                 cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04").then(
-                  User => {
-                 localStorage.setItem('auth', JSON.stringify(userEmail));
-                 setUser(userEmail);
-                 setIsLoading(false);
-                 navigate('/')
-              });
-            }
-          });
-        }
+    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+      const userEmail = userCredential.user.email;
+      // const userRole = userCredential.user.role;
+      // const userAvatar = userCredential.user.userAvatar;
+
+      if (isUserCredentialsValid(email, password)) {
+        //const dbRef = firebase.database().ref("https://bloblocor-f56ab-default-rtdb.firebaseio.com/");
+        //dbRef.ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
+          firebase.database().ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
+          const val = snapshot.val();
+          if (val) {
+            const keys = Object.keys(val);
+            const user = val[keys[0]];
+                   cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04").then(
+                    User => {
+          localStorage.setItem("auth", JSON.stringify(user));
+          setUser(userEmail);
+          setIsLoading(false);
+          navigate("/");
+        });
+      }
+    });
+    //const dbRef = firebase.database().ref.child('users')
+    //   dbRef.orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
+    //   const val = snapshot.val();
+    //   if (val) {
+    //     const keys = Object.keys(val);
+    //     const user = val[keys[0]];
+    //        cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04").then(
+    //         User => {
+    //        localStorage.setItem('auth', JSON.stringify(userEmail));
+    //        setUser(userEmail);
+    //        setIsLoading(false);
+    //        navigate('/')
+         //});
+    //   }
+    // });
+  };
       }
     );
-  }
- 
-
-   
+   }
 
   return (
     <div className="login__container">
@@ -94,22 +119,18 @@ function Login(props) {
       </div>
       <div className="login__form-container">
         <div className="login__form">
-          <input
-            type="text"
-            placeholder="Email or Username"
-            ref={emailRef}
-          />
-          <input type="password" placeholder="Password"
-           ref={passwordRef }
-           />
+          <input type="text" placeholder="Email or Username" ref={emailRef} />
+          <input type="password" placeholder="Password" ref={passwordRef} />
           <button className="login__submit-btn" onClick={login}>
             Login
           </button>
           <span className="login__forgot-password">Forgot password?</span>
-          <span className="login__signup" onClick={() => toggleModal(true)}>Create New Account</span>
+          <span className="login__signup" onClick={() => toggleModal(true)}>
+            Create New Account
+          </span>
         </div>
       </div>
     </div>
-  )
-};
+  );
+}
 export default withModal(SignUp)(Login);
