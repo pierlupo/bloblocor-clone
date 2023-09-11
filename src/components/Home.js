@@ -76,7 +76,7 @@ function Home() {
     
     map.current = L.map("map", {
       
-      center: [38.8951, -77.0364],
+      center: [50.6056026,3.1564854,13],
       zoom: 13,
       // minZoom: 5, 
       layers: [
@@ -107,7 +107,7 @@ function Home() {
           }
         ]
       },
-      router: L.Routing.mapbox(`${process.env.REACT_APP_MAP_BOX_API_KEY}`)
+      router: L.Routing.mapbox("pk.eyJ1IjoicGllcmx1cG8iLCJhIjoiY2xtN282b3k1MDJvdjNqbzU0dTlncGE5MCJ9.IHJp1MGDLsHAB94wKBiXBw")
     })
       .addTo(map.current)
       .getPlan();  

@@ -26,21 +26,23 @@ function Header() {
     }
   }
 
+  //console.log(user);
+
   return (
     <div className="header">
       <div className="header__left">
         {/* <img src={logoWhite} alt="Uber Clone" /> */}
-        <div id="title">BLOBLOCOR</div>
+        <div id="title">Bloblocor</div>
         {
           user && (
             <div className="header__right">
               <img src={user.avatar} alt={user.email}/>
-              <span>Hello, {user.email}</span>
+              <span>Hello, {user}</span>
             </div>
           )
         }
       </div>
-      <span className="header__logout" onClick={logout}><span id="btnlogout">LOGOUT</span></span>
+      <span className="header__logout" onClick={logout}><span id="btnlogout">Logout</span></span>
     </div>
   );
 }

@@ -71,7 +71,10 @@ input {
   box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
   padding: 1.25rem;
   width: 24.75rem;
+  background-color: rgba(255,255,255,0.13);
+  border-radius: 2rem;
 }
+
 
 .login__form input {
   border: 1px solid #E5E7EB;
@@ -79,6 +82,7 @@ input {
   margin-bottom: 0.75rem;
   padding: 0.875rem 1rem;
   width: 100%;
+  border-radius: 2rem;
 }
 
 .login__submit-btn {
@@ -90,6 +94,7 @@ input {
   outline: none;
   padding: 0.875rem 1rem;
   width: 100%;
+  border-radius: 2rem;
 }
 
 .login__submit-btn:hover {
@@ -243,6 +248,9 @@ input {
   margin: 15% auto; /* 15% from the top and centered */
   margin-top: 10%;
   width: 27rem; /* Could be more or less, depending on screen size */
+  border-radius: 2rem;
+  background-color: rgba(255,255,255,0.13);
+  backdrop-filter: blur(10px);
 }
 
 .signup__container {
@@ -277,6 +285,7 @@ input {
 .signup__form {
   width: 100%;
   padding: 1.25rem;
+  
 }
 
 .signup__form input {
@@ -287,6 +296,7 @@ input {
   margin-bottom: 0.75rem;
   padding: 0.875rem 1rem;
   width: 100%;
+  border-radius: 2rem;
 }
 
 .signup__form select {
@@ -299,6 +309,7 @@ input {
   outline: none;
   padding: 0 1rem;
   width: 100%;
+  border-radius: 2rem;
 }
 
 .signup__btn {
@@ -311,6 +322,7 @@ input {
   margin: 1.25rem auto;
   outline: none;
   padding: 0.875rem 1rem;
+  border-radius: 2rem;
 }
 
 .signup__btn:hover {
@@ -588,7 +600,7 @@ input {
   background-color: rgb(255, 255, 255);
   box-shadow: rgb(0 0 0 / 15%) 0px 4px 16px;
   height: 32.0625rem;
-  left: 2%;
+  left: 3%;
   position: fixed;
   top: 13%;
   width: 25rem;
@@ -737,10 +749,12 @@ input {
 #title{
   color:rgba(255, 255, 255, 0.829);
   font-size: 25px;
-  letter-spacing: 1rem;
+  letter-spacing: 0.5rem;
+  font-weight: lighter;
   }
 
 #btnlogout{
   font-size: 25px;
-  letter-spacing: 1rem;
+  letter-spacing: 0.5rem;
+  font-weight: lighter;
 }

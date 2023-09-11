@@ -16,11 +16,11 @@ axios.interceptors.request.use(function (config) {
   
 export const getAllReservations = () => axios.get(BASE_REST_API_URL)
 
-export const saveResa = (todo) => axios.post(BASE_REST_API_URL, todo)
+export const saveResa = (reservation) => axios.post(BASE_REST_API_URL, reservation)
 
 export const getResa = (id) => axios.get(BASE_REST_API_URL + '/' + id)
 
-export const updateResa = (id, todo) => axios.put(BASE_REST_API_URL + '/' + id, todo)
+export const updateResa = (id, reservation) => axios.put(BASE_REST_API_URL + '/' + id, reservation)
 
 export const deleteResa = (id) => axios.delete(BASE_REST_API_URL + '/' + id)
 

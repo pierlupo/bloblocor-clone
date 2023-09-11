@@ -1,12 +1,13 @@
 // import useRef and useContext
+import 'firebase/database'
 import { useRef, useContext } from "react";
-// import 'firebase/database'
 // import Context to get shared data from React context.
 import Context from "../Context";
 // import firebase authentication and real time database.
- import { auth, realTimeDb } from "../firebase";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
-import { ref, onValue, getDatabase } from 'firebase/database'
+import { db, auth, realTimeDb } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { ref } from "firebase/database"
+import firebase from 'firebase/compat/app'
 // import validator to validate user's credentials.
 import validator from "validator";
 // import custom components.
@@ -34,7 +35,7 @@ function Login(props) {
   /**
    * validate user's credentials.
    * @param {*} email 
-   * @param {*} password 
+   * @param {*} password  
    * @returns 
    */
   const isUserCredentialsValid = (email, password) => {
@@ -45,34 +46,42 @@ function Login(props) {
    * login
    */
   const login = () => {
-    // show loading indicator.
+
     setIsLoading(true);
-    // get the user's credentials.
+
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    const auth = getAuth();
-    //  if (isUserCredentialsValid(email, password)) {
-      console.log(email, password);
-      // if the user's credentials are valid, call Firebase authentication service.
-      signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+    //const auth = getAuth();
 
+    console.log(email, password);
+
+      signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
         const userEmail = userCredential.user.email;
-        // const dbRef = ref(realTimeDb,`users/${email}`);
-        // dbRef.on("value", snapshot => {
-        //   console.log(snapshot.val());
-        // });
+        
         if (isUserCredentialsValid(email, password)) {
-         
+          //const userRef = ref(realTimeDb, 'users');
+          //const userRef = ref(realTimeDb);
+          // const userRef = "https://bloblocor-f56ab-default-rtdb.firebaseio.com/users"
+          // console.log(userRef, realTimeDb);
+          firebase.database().ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
+            const val = snapshot.val();
+            if (val) {
+              const keys = Object.keys(val);
+              const user = val[keys[0]];
+              cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04").then(
+                User => {
           localStorage.setItem('auth', JSON.stringify(userEmail));
           setUser(userEmail);
           setIsLoading(false);
           navigate('/')
-        }
+            }
+          );
+       }
       });
     }
-
-    // }
-        // dbRef.orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
+ })
+}
+        // realTimeDb.ref().child('users').orderByChild('email').equalTo(userEmail).on("value", function(snapshot) {
         //        const val = snapshot.val();
         //        if (val) {
         //          const keys = Object.keys(val);
@@ -82,7 +91,7 @@ function Login(props) {
                //cometChat.login(user.id, `${process.env.REACT_APP_COMETCHAT_AUTH_KEY}`).then(
   //              cometChat.login(user.id, "acbd9af1d08f7723c91675770d8d4598f9314c04" ).then(
   //                User  => {
-  //                 // User loged in successfully.
+  //                 // User logged in successfully.
   //                 // save authenticated user to local storage.
   //                  localStorage.setItem('auth', JSON.stringify(user));
   //                 // save authenticated user to context.
@@ -92,7 +101,8 @@ function Login(props) {
   //                 // redirect to home page.
   //                 navigate('/');
   //                 console.log(user)
-  //                },
+  //                }
+  //,
   //               error => {
   //                 " User login failed, check error and take appropriate action."
   //               }
